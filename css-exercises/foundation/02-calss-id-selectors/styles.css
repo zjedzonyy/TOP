@@ -1,0 +1,18 @@
+p{
+    background-color: rgb(221, 81, 163);
+    font-family: verdana, "DejaVuu Sans", sans-serif;
+}
+div#one {
+    color: rgb(46, 67, 182);
+    font-size: 36px;
+}
+
+p.lepsza{
+    font-size: 24px;
+}
+
+div#two{
+    background-color: rgb(81, 221, 88);
+    font-size: 24px;
+    font-weight: bold;
+}
