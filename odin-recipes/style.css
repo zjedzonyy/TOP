@@ -1,0 +1,31 @@
+body{
+    background-color: bisque;
+}
+
+
+h1{
+    font-size: 54px;
+    text-align: center;
+}
+
+a{
+    font-size: 40px;
+    margin-left: 350px;
+}
+.pic{
+    text-align: center;
+    width: 400px auto;
+}
+.links{
+    text-align: center;
+    margin-right: 250px;
+}
+p{
+    margin: 50px;
+}
+
+img{
+    height: 300px;
+    width: auto;
+    margin-left: 20px;
+}
