@@ -3,19 +3,35 @@ function getRandomInt(min, max){
     return Math.floor(Math.random() * (max - min) + min);
 }
 
-let firstCard = getRandomInt(2, 11)
-let secondCard = getRandomInt(2, 11)
-let cards = [firstCard, secondCard]
-let sum = firstCard + secondCard
-let win = false
-let isAlive = true
+let cards = []
+let sum = 0
+let hasBlackJack = false
+let isAlive = false
+let gameStarted = false
 let message = ""
 let messageEl = document.getElementById("message")
 let cardsEl = document.getElementById("cardsEl")
 let sumEl = document.getElementById("sumEl")
 
 function startGame(){
+    // set the game
+    if (gameStarted){
+        alert("The game has already started. Click New Game to start over")
+        return;
+    }
+
+    let firstCard = getRandomInt(2, 11)
+    let secondCard = getRandomInt(2, 11)
+    cards = [firstCard, secondCard]
+    sum = firstCard + secondCard
+    isAlive = true
+    gameStarted = true
+    
     renderGame()
+}
+
+function newGame(){
+    location.reload()
 }
 
 function renderGame(){
@@ -29,7 +45,7 @@ function renderGame(){
     }
     else if (sum === 21) {
         message = "You've got a Blackjack!"
-        win = true
+        hasBlackJack = true
     }
     else {
         message = ("BIG L")
@@ -40,10 +56,13 @@ function renderGame(){
 }
 
 function newCard(){
-    let thirdCard = getRandomInt(2, 11)
-    cards.push(thirdCard)
-    sum += thirdCard
-    renderGame()
-
-    
+    if (isAlive === true && hasBlackJack === false){
+        let thirdCard = getRandomInt(2, 11)
+        cards.push(thirdCard)
+        sum += thirdCard
+        renderGame()   
+    }
 }
+
+// disabled start game and new card button if sum > 21
+// disabled new card button if sum = 0
