@@ -1,0 +1,38 @@
+h1 {
+    color: goldenrod;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex: 1;
+    font-weight: bold;
+    color: whitesmoke;
+    font-family: 'Trebuchet MS';
+}
+.container h1{
+    font-size: 64px;
+}
+.container p{
+    font-size: 24px;
+}
+body{
+    background-image: url("table.png");
+    background-size: cover;
+}
+
+.new,
+.starting{
+    font-size: 30px;
+    width: 300px;
+    height: 50px;
+    background-color: goldenrod;
+    border-radius: 12px;
+    color: #016f32;
+    font-weight: bold;
+    border: none;
+    padding: 5px;
+    margin-bottom: 10px;
+}

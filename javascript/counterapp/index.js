@@ -1,6 +1,6 @@
 
 let countEl = document.getElementById("count-el")
-
+let entries = document.getElementById("save-el")
 
 let counter = 0
 function increment(){
@@ -13,7 +13,7 @@ function decrement(){
     countEl.innerText = counter
 }
 
-let entries = document.getElementById("save-el")
+
 function save(){
     let entry = counter
     entries.innerText += " " + counter + " -"
