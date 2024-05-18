@@ -1,0 +1,176 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  text-align: center;
+}
+
+.container div {
+  padding: 15px;
+  font-size: 32px;
+  font-family: Helvetica;
+  font-weight: bold;
+  color: white;
+}
+
+.header {
+  background-color: #393f4d;
+}
+
+.menu ul,
+.menu li {
+  font-size: 16px;
+}
+
+.sidebar {
+  background-color: #C50208;
+}
+
+.sidebar .photo {
+  background-color: white;
+  color: black;
+  font-size: 12px;
+  font-weight: normal;
+  border-radius: 10px;
+}
+
+
+.sidebar .side-content {
+  background-color: white;
+  color: black;
+  font-size: 16px;
+  font-weight: normal;
+}
+
+.nav {
+  background-color: #C50208;
+}
+
+.nav ul li {
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.article {
+  background-color: #bccbde;
+}
+
+.article p {
+  font-size: 18px;
+  font-family: sans-serif;
+  color: white;
+  text-align: left;
+}
+
+.article .card {
+  background-color: #FFFFFF;
+  color: black;
+  text-align: center;
+}
+
+.card p {
+  color: black;
+  font-weight: normal;
+  font-size: 14px;
+}
+
+.card .title {
+  font-size: 18px;
+  text-align: center;
+}
+
+.footer {
+  background-color: #393f4d;
+}
+
+.footer p {
+  font-size: 13px;
+  font-weight: normal;
+}
+
+.container{
+  display: grid;
+  grid-template-rows: 10vh 5vh 1fr 4vh;
+  grid-template-columns: 20vw 80vw;
+  gap: 4px;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* My_solution */
+
+.header{
+  grid-area: 1 / 1 / 2 / 3;
+  display: grid;
+  grid-template-columns: 32% 68%;
+  grid-template-rows: auto;
+}
+.logo{
+  display: grid;
+  justify-content: start;
+  align-items: center;
+}
+
+.menu{
+  display: grid;
+  justify-items: end;
+  align-items: center;
+}
+
+.menu > ul {
+  list-style: none;
+  display: grid;
+  display: inline;
+  grid-template-columns: repeat(4, 25%);
+}
+
+li{
+  display: inline;
+  justify-items: start;
+  margin: 3vw;
+}
+
+.sidebar{
+  display: grid;
+  grid-area: 2 / 1 / 4 / 2;
+  gap: 50px;
+}
+
+.photo, .side-content{
+  display: grid;
+  align-items: center;
+}
+
+
+.nav{
+  display: grid;
+  place-content: center;
+  grid-area: 2 / 2 / 3 / 3;
+}
+
+.nav > ul{
+  list-style: none;
+  display: inline;
+}
+
+.nav > ul > li{
+  margin: 8vw;
+}
+
+.article{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  grid-area: 3 / 2 / 4 / 3;
+}
+
+.card{
+  min-height: 200px;
+}
+
+.footer{
+  grid-area: 4 / 1 / 5 / 3;
+  margin-bottom: 5px;
+}
