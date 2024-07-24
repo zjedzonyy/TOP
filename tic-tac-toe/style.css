@@ -1,3 +1,68 @@
+@import 'node_modules/modern-normalize/modern-normalize.css';
+
+h1, h2, h3, h4, h5, figure, p, ol, ul {
+    margin: 0;
+  }
+  
+  ol, ul {
+    list-style: none;
+    padding-inline: 0;
+  }
+  
+  h1, h2, h3, h4, h5 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+  
+  /* The overflow-wrap property lets us tweak the line-wrapping algorithm, and give it permission to use hard wraps when no soft wrap opportunties can be found: */
+  p, h1, h2, h3, h4, h5, h6 {
+      overflow-wrap: break-word;
+    }
+  
+  img, picture, video, canvas, svg {
+    display: block;
+    max-inline-size: 100%;
+  }
+  
+  input, button, textarea, select {
+      font: inherit;
+    }
+  
+  /* This alternative uses the font-size as a base, and adds a fixed amount of space to each line. */
+  * {
+      line-height: calc(1em + 0.5rem);
+    }
+  
+  body {
+    -webkit-font-smoothing: antialiased;
+  }
+
+  
 body {
     background-color: blanchedalmond;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 200px);
+    grid-template-rows: repeat(3, 200px);
+    gap: 5px;
+}
+.cell {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #000;
+    font-size: 24px;
+}
+
+.container {
+    display: flex;
+    width: 100wv;
+    height: 100vh;
+    background-color: rgb(17, 48, 3);
+    align-items: center;
+    justify-content: center;
 }

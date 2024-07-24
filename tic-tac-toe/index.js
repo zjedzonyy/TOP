@@ -155,11 +155,8 @@ const checkWinner = () => {
         return "Tie";
     }
 
-
     // brak zwyciezcy 
     return null;
-
-    
 }
 
 const playGame = () => {
@@ -173,6 +170,7 @@ const playGame = () => {
     console.log(winner);
 }
 
-playGame();
+
 
 // TODO: poprawić co ktora funkcja zwraca i dopiescic
+// TODO: set screenController()
