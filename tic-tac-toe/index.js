@@ -15,7 +15,7 @@ function gameBoard() {
     return initialState();
 }
 
-let board = gameBoard();
+const board = gameBoard();
 
 // return whose next turn is, "X" or "O"
 const player = () => {
@@ -140,7 +140,20 @@ const checkWinner = () => {
 
     }
     // sprawdz po skosie 
-    if (board[0][0] == board[1][1] == board[2][2] != null)
+    if (board[0][0] === board[1][1] && board[1][1] === board[2][2] && board[2][2] != null) {
+        console.log(board[0][0]);
+        return (board[0][0]);
+    } else if (board[2][0] === board[1][1] && board[1][1] === board[0][2] && board[0][2] != null) {
+        console.log(`The winner is ${board[0][0]}`);
+        return (board[2][0]);
+    }
+
+    // sprawdz remis
+    const aveMoves = action();
+
+    if (aveMoves.size === 0) {
+        return "Tie";
+    }
 
 
     // brak zwyciezcy 
@@ -150,6 +163,7 @@ const checkWinner = () => {
 }
 
 const playGame = () => {
+    const board = gameBoard();
     let winner = checkWinner()
     console.log(winner);
     while (winner === null) {
@@ -161,6 +175,4 @@ const playGame = () => {
 
 playGame();
 
-
-// TODO: zaimplementowanie sprawdzenia remisu (czyli brak avMoves i winner === null)
-// TODO: poprawić co ktora funkcja zwraca i dopiescic kod
+// TODO: poprawić co ktora funkcja zwraca i dopiescic
