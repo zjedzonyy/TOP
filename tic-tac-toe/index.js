@@ -33,8 +33,10 @@ const player = () => {
     }
 
     if (counto >= countx) {
+        console.log("X's turn is now");
         return "X";
     } else if (counto < countx) {
+        console.log("Y turn is now");
         return "O";
     }
 }
@@ -68,23 +70,25 @@ function arraysEqual(arr1, arr2) {
 }
 
 // ask for a move and update the table
-const makeMove = () => {
+const makeMove = (x,y) => {
+    x = Number(x);
+    y = Number(y);
+    console.log(`Proba ruchu na pozycji: ${x} ${y}`);
     const whoseMove = player();
-
+    console.log(`Ruch gracza: ${whoseMove}`);
+    const moveMade = [x, y];
     
-    let move = prompt(`${whoseMove} move, type coordinates [x,y]: `);
-    const moveMade = move.split(',').map(Number);
+    // let move = prompt(`${whoseMove} move, type coordinates [x,y]: `);
+    // const moveMade = move.split(',').map(Number);
     // const moveMade = new Set(moveArray);
 
-    console.log(moveMade);
     const aveMoves = action();
-    console.log(aveMoves);
 
     for (const value of aveMoves) {
         if (arraysEqual(moveMade, value)) {
             console.log("move is valid");
             board[moveMade[0]][moveMade[1]] = whoseMove;
-            console.log(board);
+            console.log("Stan planszy po ruchu:", board);
         }
     }
     
@@ -99,10 +103,8 @@ const checkWinner = () => {
         for (let j = 0; j <= 2; j++) {
             if (board[i][j] === "X") {
                 countx++;
-                console.log("Punkt dla X");
             } else if (board[i][j] === "O"){
                 counto++;
-                console.log("punkt dla O");
             }
         if (countx === 3) {
             console.log("Wygral X poziomo")
@@ -122,10 +124,8 @@ const checkWinner = () => {
         for (let j = 0; j <= 2; j++) {
             if (board[j][i] === "X") {
                 countx++;
-                console.log("Punkt dla X");
             } else if (board[j][i] === "O"){
                 counto++;
-                console.log("punkt dla O");
             }
         if (countx === 3) {
             console.log("Wygral X pionowo");
@@ -156,21 +156,69 @@ const checkWinner = () => {
     }
 
     // brak zwyciezcy 
+    console.log("No winner yet!");
     return null;
 }
 
 const playGame = () => {
-    const board = gameBoard();
-    let winner = checkWinner()
-    console.log(winner);
-    while (winner === null) {
-        makeMove();
-        winner = checkWinner();
-    }
+    // updateButtons();
+    // screenController();
+    let whoseMove = player();
+    let winner = checkWinner();
+
+    //TODO: do ktoregos wsadzic sprawdzanie winner i przerwania i wyswietlenia wyniku
+    // jezeli winner inny niz null
+
+    //TDODO: GUI nie updejtuje boardu dobrze. 
+    updateButtons();
+    screenController();
+
+    // while (winner === null) {
+    //     winner = checkWinner();;
+    //     whoseMove = player();
+    //     // screenController();
+    //     console.log(board);
+    //     console.log(`${whoseMove} MOVE`);
+    //     //disabled all buttons
+    // }
     console.log(winner);
 }
 
 
+function screenController() {
+    const playerTurnDiv = document.querySelector('.turn');
+    const cells = document.querySelectorAll('.cell');
+    const boardDiv = document.querySelector('.board');
 
-// TODO: poprawić co ktora funkcja zwraca i dopiescic
-// TODO: set screenController()
+    // get the newest version of the board and player turn
+    const whoseMove = player();
+    playerTurnDiv.textContent = `${whoseMove}'s turn`
+
+    // update GUI X, O or NULL
+    cells.forEach(cell => {
+        const x = cell.getAttribute('data-x');
+        const y = cell.getAttribute('data-y');
+        const button = cell.querySelector('button');
+        button.textContent = board[x][y];
+        if (board[x][y] !==  null) {
+            button.classList.add('disabled');
+            button.disabled = true;
+            
+        }
+    })
+
+}
+
+
+function updateButtons() {
+    const cells = document.querySelectorAll('.cell button').forEach(button => {
+        button.addEventListener('click', (event) => {
+            const cell = event.target.parentElement;
+            const x = Number(cell.getAttribute('data-x')); // Konwersja do liczby
+            const y = Number(cell.getAttribute('data-y')); // Konwersja do liczby
+            makeMove(x, y);
+        });
+    });
+}
+
+playGame();
