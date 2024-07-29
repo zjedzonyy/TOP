@@ -1,6 +1,4 @@
 function gameBoard() {
-    const X = "X";
-    const O = "O";
     const EMPTY  = null;
 
     // initial state function
@@ -150,8 +148,9 @@ const checkWinner = () => {
 
     // sprawdz remis
     const aveMoves = action();
-
-    if (aveMoves.size === 0) {
+    console.log(aveMoves);
+    if (aveMoves.size == 0) {
+        console.log("tie");
         return "Tie";
     }
 
@@ -161,27 +160,10 @@ const checkWinner = () => {
 }
 
 const playGame = () => {
-    // updateButtons();
-    // screenController();
-    let whoseMove = player();
-    let winner = checkWinner();
-
-    //TODO: do ktoregos wsadzic sprawdzanie winner i przerwania i wyswietlenia wyniku
-    // jezeli winner inny niz null
-
-    //TDODO: GUI nie updejtuje boardu dobrze. 
+    first_player = document.get
     updateButtons();
     screenController();
 
-    // while (winner === null) {
-    //     winner = checkWinner();;
-    //     whoseMove = player();
-    //     // screenController();
-    //     console.log(board);
-    //     console.log(`${whoseMove} MOVE`);
-    //     //disabled all buttons
-    // }
-    console.log(winner);
 }
 
 
@@ -189,10 +171,16 @@ function screenController() {
     const playerTurnDiv = document.querySelector('.turn');
     const cells = document.querySelectorAll('.cell');
     const boardDiv = document.querySelector('.board');
+    const winnerDiv = document.querySelector('.winner');
 
     // get the newest version of the board and player turn
     const whoseMove = player();
     playerTurnDiv.textContent = `${whoseMove}'s turn`
+    const winner = checkWinner();
+    if (winner !== null) {
+        winnerDiv.textContent = `Thew inner is${winner}!`;
+        //disable all buttons?
+    }
 
     // update GUI X, O or NULL
     cells.forEach(cell => {
@@ -200,11 +188,11 @@ function screenController() {
         const y = cell.getAttribute('data-y');
         const button = cell.querySelector('button');
         button.textContent = board[x][y];
-        if (board[x][y] !==  null) {
+        if (board[x][y] !==  null || winner !== null) {
             button.classList.add('disabled');
-            button.disabled = true;
-            
+            button.disabled = true;        
         }
+        
     })
 
 }
@@ -214,11 +202,36 @@ function updateButtons() {
     const cells = document.querySelectorAll('.cell button').forEach(button => {
         button.addEventListener('click', (event) => {
             const cell = event.target.parentElement;
-            const x = Number(cell.getAttribute('data-x')); // Konwersja do liczby
-            const y = Number(cell.getAttribute('data-y')); // Konwersja do liczby
+            const x = cell.getAttribute('data-x'); 
+            const y = cell.getAttribute('data-y'); 
             makeMove(x, y);
+            checkWinner();
+            screenController();
         });
     });
 }
 
-playGame();
+document.addEventListener('DOMContentLoaded', () => {
+    let player1Name = '';
+    let player2Name = '';
+    const playerForm = document.getElementById('playerForm');
+    playerForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        player1Name = document.getElementById('player1').value;
+        player2Name = document.getElementById('player2').value;
+        playGame();
+    })
+
+
+})
+
+
+
+
+
+// ulozono logike - sprwadzanie winner i screencontroller update do kazdego updatebuttons
+// dodano wyswietlanie wygranego na ekranie.
+// wylaczono mozliwosc dalszego grania po wylonieniu zwyciezcy 
+
+// TODO: 1. Zmienic funkcje zeby uzywaly nickow dostarczonych z formularza.
+//       2. Include a button to start/restart the game

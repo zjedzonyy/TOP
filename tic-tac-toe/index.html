@@ -8,8 +8,17 @@
 </head>
 <body>
     <div class="container">
-        <div class="player"></div>
+        <form id="playerForm">
+            <label for="player1">First player name</label>
+            <input id="player1" type="text" placeholder="X" name="player1">
+            <br>
+            <label for="player2">Second player name</label>
+            <input id="player2" type="text" placeholder="O" name="player2">
+            <br>
+            <button type="submit">Start Game</button>
+        </form>
         <div class="turn"></div>
+        <div class="winner"></div>
         <div class="start"></div>
         <div class="board">
             <div class="cell" data-x="0" data-y="0"><button></button></div>
