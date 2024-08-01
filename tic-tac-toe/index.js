@@ -1,7 +1,9 @@
-const gameBoard = (()=> {
+// IIFE to create a game board module
+const gameBoard = (() => {
     const EMPTY = null;
     let board = initialState();
 
+    // Initial state of the board
     function initialState() {
         return [
             [EMPTY, EMPTY, EMPTY],
@@ -10,13 +12,17 @@ const gameBoard = (()=> {
         ];
     }
 
+    // Get current board state
     const getBoard = () => board;
+    // Reset the board to initial state
     const resetBoard = () => board = initialState();
+    // Set a field on the board
     const setField = (x, y, player) => board[x][y] = player;
-    
+
     return { getBoard, resetBoard, setField };
 })();
 
+// Player factory function
 const Player = (name, sign) => {
     const getName = () => name;
     const getSign = () => sign;
@@ -24,16 +30,28 @@ const Player = (name, sign) => {
     return { getName, getSign };
 };
 
-
+// IIFE to create a game controller module
 const gameController = (() => {
-    const player1 = Player('Player1', 'X');
-    const player2 = Player('Player2', 'O');
+    let player1 = Player('Player1', 'X');
+    let player2 = Player('Player2', 'O');
     let currentPlayer = player1;
 
+    // Set player names
+    const setPlayerNames = (name1, name2) => {
+        player1 = Player(name1, 'X');
+        player2 = Player(name2, 'O');
+        currentPlayer = player1;
+    };
+
+    // Switch the current player
     const switchPlayer = () => {
         currentPlayer = currentPlayer === player1 ? player2 : player1;
     };
 
+    // Get the current player
+    const getCurrentPlayer = () => currentPlayer;
+
+    // Make a move on the board
     const makeMove = (x, y) => {
         if (gameBoard.getBoard()[x][y] === null) {
             gameBoard.setField(x, y, currentPlayer.getSign());
@@ -41,6 +59,7 @@ const gameController = (() => {
         }
     };
 
+    // Check for a winner
     const checkWinner = (board) => {
         const winningCombinations = [
             [[0, 0], [0, 1], [0, 2]],
@@ -70,261 +89,102 @@ const gameController = (() => {
         return null;
     };
 
-    return { switchPlayer, makeMove, checkWinner };
+    return { setPlayerNames, getCurrentPlayer, switchPlayer, makeMove, checkWinner };
 })();
 
+// IIFE to create a display controller module
+const displayController = (() => {
+    const cells = document.querySelectorAll('.cell');
+    const playerForm = document.getElementById('playerForm');
+    const startButton = document.getElementById('submit');
+    const restartButton = document.getElementById('restart');
+    let player1Name = '';
+    let player2Name = '';
 
-const playGame = () => {
-    // updateButtons();
-    // screenController();
-    let board = gameBoard.getBoard();
-    let winner = gameController.checkWinner(board);
-    while (winner === null) {
-        let move = prompt("Daj x,y:");
-        let x = move[0];
-        console.log(x);
-        let y = move[1];
-        gameController.makeMove(x, y);
-        winner = gameController.checkWinner(board);
+    // Handle player form submission
+    playerForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        player1Name = document.getElementById('player1').value;
+        player2Name = document.getElementById('player2').value;
 
-        if (winner === "Tie") {
-            console.log("It's a tie!");
-            break;
-        } else if (winner) {
-            console.log(`${winner.getName()} is the winner`);
-            break;
-        } else {
-            console.log("The game is still ongoing.");
-        }
+        startGame(player1Name, player2Name);
+    });
+
+    // Handle game restart
+    restartButton.addEventListener('click', () => {
+        resetGame();
+    });
+
+    // Update the board display
+    const updateBoard = () => {
+        cells.forEach(cell => {
+            const x = cell.getAttribute('data-x');
+            const y = cell.getAttribute('data-y');
+            const btn = cell.querySelector('button');
+            btn.textContent = gameBoard.getBoard()[x][y];    
+            
+            if (gameBoard.getBoard()[x][y] !== null) {
+                btn.disabled = true;
+            } else {
+                btn.disabled = false;
+            }
+        });
+    };
+
+    // Display the winner
+    const showWinner = (winner) => {
+        const winnerDiv = document.querySelector('.winner');
+        winnerDiv.textContent = `The winner is ${winner.getName()}`;
     }
+
+    // Show the current player's turn
+    const showTurn = () => {
+        const turnDiv = document.getElementById('turn');
+        turnDiv.textContent = gameController.getCurrentPlayer().getName();
+    }
+
+    // Set up event listeners for cell buttons
+    const setupEventListeners = () => {
+        cells.forEach(cell => {
+            const x = cell.getAttribute('data-x');
+            const y = cell.getAttribute('data-y');
+            const btn = cell.querySelector('button');
+            btn.addEventListener('click', () => {
+                showTurn();
+                gameController.makeMove(x, y);
+                updateBoard();
+                const winner = gameController.checkWinner(gameBoard.getBoard());
+                if (winner) {
+                    const turnDiv = document.getElementById('turn');
+                    turnDiv.textContent = '';
+                    showWinner(winner);
+                    cells.forEach(cell => {
+                        const btn = cell.querySelector('button');
+                        btn.disabled = true;
+                    });
+                }
+            });
+        });
+    }
+
+    return { updateBoard, showWinner, setupEventListeners, showTurn };
+})();
+
+// Start the game with initial player names
+const startGame = (player1Name, player2Name) => {
+    gameController.setPlayerNames(player1Name, player2Name);
+    displayController.setupEventListeners();
+    displayController.updateBoard();
+    displayController.showTurn();
 }
 
+// Reset the game
+const resetGame = () => {
+    gameBoard.resetBoard();
+    displayController.updateBoard();
+    displayController.setupEventListeners();
+    displayController.showTurn();
+}
 
-playGame();
-
-
-
-
-
-
-
-
-
-// (() => {
-//     document.addEventListener('DOMContentLoaded', () => {
-//         let player1Name = '';
-//         let player2Name = '';
-//         const playerForm = document.getElementById('playerForm');
-//         const startButton = document.getElementById('submit');
-//         const gameBoard = document.getElementById('gameBoard');
-//         let board;
-
-//         playerForm.addEventListener('submit', (event) => {
-//             event.preventDefault();
-//             if (startButton.textContent === "Start Game") {
-//                 player1Name = document.getElementById('player1').value;
-//                 player2Name = document.getElementById('player2').value;
-//                 startGame();
-//             } else {
-//                 resetGame();
-//             }
-//         });
-
-//         const startGame = () => {
-//             board = gameBoardState();
-//             updateButtons();
-//             screenController();
-//             startButton.textContent = "Restart Game";
-//         };
-
-//         const resetGame = () => {
-//             board = gameBoardState();
-//             updateButtons();
-//             screenController();
-//             startButton.textContent = "Restart Game";
-//         };
-
-//         const gameBoardState = () => {
-//             const EMPTY = null;
-
-//             function initialState() {
-//                 return [
-//                     [EMPTY, EMPTY, EMPTY],
-//                     [EMPTY, EMPTY, EMPTY],
-//                     [EMPTY, EMPTY, EMPTY]
-//                 ];
-//             }
-
-//             return initialState();
-//         };
-
-//         // Determine whose turn it is
-//         const player = () => {
-//             let countx = 0;
-//             let counto = 0;
-
-//             for (let i = 0; i <= 2; i++) {
-//                 for (let j = 0; j <= 2; j++) {
-//                     if (board[i][j] === "X") {
-//                         countx++;
-//                     } else if (board[i][j] === "O") {
-//                         counto++;
-//                     }
-//                 }
-//             }
-
-//             if (counto >= countx) {
-//                 return "X";
-//             } else {
-//                 return "O";
-//             }
-//         };
-
-//         // Get the set of available moves
-//         const action = () => {
-//             const mySet = new Set();
-
-//             for (let i = 0; i <= 2; i++) {
-//                 for (let j = 0; j <= 2; j++) {
-//                     if (board[i][j] === null) {
-//                         mySet.add([i, j]);
-//                     }
-//                 }
-//             }
-//             return mySet;
-//         };
-
-//         // Check if two arrays are equal
-//         function arraysEqual(arr1, arr2) {
-//             if (arr1.length !== arr2.length) return false;
-//             for (let i = 0; i < arr1.length; i++) {
-//                 if (arr1[i] !== arr2[i]) return false;
-//             }
-//             return true;
-//         }
-
-//         // Make a move on the board
-//         const makeMove = (x, y) => {
-//             x = Number(x);
-//             y = Number(y);
-//             const whoseMove = player();
-//             const moveMade = [x, y];
-//             const aveMoves = action();
-
-//             for (const value of aveMoves) {
-//                 if (arraysEqual(moveMade, value)) {
-//                     board[moveMade[0]][moveMade[1]] = whoseMove;
-//                 }
-//             }
-//             screenController();
-//         };
-
-//         // Check if there is a winner
-//         const checkWinner = () => {
-//             let countx = 0;
-//             let counto = 0;
-
-//             // Check horizontal lines
-//             for (let i = 0; i <= 2; i++) {
-//                 for (let j = 0; j <= 2; j++) {
-//                     if (board[i][j] === "X") {
-//                         countx++;
-//                     } else if (board[i][j] === "O"){
-//                         counto++;
-//                     }
-//                 if (countx === 3) {
-//                     return player1Name;
-//                 } else if (counto === 3) {
-//                     return player2Name;
-//                 }
-//                 }
-//                 countx = 0;
-//                 counto = 0;
-//             }
-
-//             // Check vertical lines
-//             for (let i = 0; i <= 2; i++) {
-//                 for (let j = 0; j <= 2; j++) {
-//                     if (board[j][i] === "X") {
-//                         countx++;
-//                     } else if (board[j][i] === "O"){
-//                         counto++;
-//                     }
-//                 if (countx === 3) {
-//                     return player1Name;
-//                 } else if (counto === 3) {
-//                     return player2Name;
-//                 }
-//                 }
-//                 countx = 0;
-//                 counto = 0;
-//             }
-
-//             // Check diagonals
-//             if (board[0][0] === board[1][1] && board[1][1] === board[2][2] && board[2][2] != null) {
-//                 return board[0][0] === "X" ? player1Name : player2Name;
-//             } else if (board[2][0] === board[1][1] && board[1][1] === board[0][2] && board[0][2] != null) {
-//                 return board[2][0] === "X" ? player1Name : player2Name;
-//             }
-
-//             const aveMoves = action();
-//             if (aveMoves.size == 0) {
-//                 return "There's no winner!";
-//             }
-
-//             return null;
-//         };
-
-//         // Update the screen with the current state of the game
-//         function screenController() {
-//             const playerTurnDiv = document.querySelector('.turn');
-//             const cells = document.querySelectorAll('.cell');
-//             const winnerDiv = document.querySelector('.winner');
-
-//             const whoseMove = player();
-//             playerTurnDiv.textContent = `${whoseMove}'s turn`;
-//             const winner = checkWinner();
-
-//             cells.forEach(cell => {
-//                 const x = cell.getAttribute('data-x');
-//                 const y = cell.getAttribute('data-y');
-//                 const button = cell.querySelector('button');
-//                 button.textContent = board[x][y];
-//                 if (board[x][y] !== null) {
-//                     button.classList.add('disabled');
-//                     button.disabled = true;
-//                 } else {
-//                     button.classList.remove('disabled');
-//                     button.disabled = false;
-//                 }
-//             });
-            
-//             if (winner !== null) {
-//                 winnerDiv.textContent = `The winner is ${winner}!`;
-//                 cells.forEach(cell => {
-//                     const button = cell.querySelector('button');
-//                     playerTurnDiv.textContent = "";
-//                     button.classList.add('disabled');
-//                     button.disabled = true;
-//                 });
-//             }
-            
-//         }
-
-//         // Add event listeners to the buttons
-//         function updateButtons() {
-//             document.querySelectorAll('.cell button').forEach(button => {
-//                 button.addEventListener('click', (event) => {
-//                     const cell = event.target.parentElement;
-//                     const x = cell.getAttribute('data-x');
-//                     const y = cell.getAttribute('data-y');
-//                     makeMove(x, y);
-//                     screenController();
-//                 });
-//             });
-//         }
-//     });
-// })();
-
-
-// //Refactored code for better modularity and separation of concerns:
+// Start the game with default player names
+startGame('Player1', 'Player2');

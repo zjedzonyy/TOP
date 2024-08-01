@@ -75,7 +75,7 @@ body {
   border: none;
   cursor: pointer;
 }
-.cell button.disabled {
+.cell button:disabled {
   background-color: lightgray;
   cursor: not-allowed;
 }
