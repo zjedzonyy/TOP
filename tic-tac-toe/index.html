@@ -9,17 +9,25 @@
 <body>
     <div class="container">
         <form id="playerForm">
-            <label for="player1">First player name</label>
-            <input id="player1" type="text" placeholder="X" name="player1">
-            <br>
-            <label for="player2">Second player name</label>
-            <input id="player2" type="text" placeholder="O" name="player2">
-            <br>
-            <button id="submit" type="submit">Start</button>
-            <button id="restart">Restart</button>
+            <div class="player_container">
+                <div class="player">
+                    <label for="player1">X</label>
+                    <input id="player1" type="text" placeholder="X" value="Player1" name="player1">
+                </div>
+                <div class="player">
+                    <label for="player2">O</label>
+                    <input id="player2" type="text" placeholder="O" value="Player2" name="player2">
+                </div>
+            </div>
+            <div class="buttons">
+                <button id="submit" type="submit">Start</button>
+                <button id="restart">Restart</button>
+            </div>
         </form>
         <div id="turn"></div>
+        <br>
         <div class="winner"></div>
+        <br>
         <div class="board">
             <div class="cell" data-x="0" data-y="0"><button></button></div>
             <div class="cell" data-x="0" data-y="1"><button></button></div>

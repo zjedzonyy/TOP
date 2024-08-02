@@ -19,7 +19,11 @@ const gameBoard = (() => {
     // Set a field on the board
     const setField = (x, y, player) => board[x][y] = player;
 
-    return { getBoard, resetBoard, setField };
+    const isBoardEmpty = () => {
+        return board.every(row => row.every(cell => cell === EMPTY));
+    };
+
+    return { getBoard, resetBoard, setField, isBoardEmpty };
 })();
 
 // Player factory function
@@ -98,6 +102,7 @@ const displayController = (() => {
     const playerForm = document.getElementById('playerForm');
     const startButton = document.getElementById('submit');
     const restartButton = document.getElementById('restart');
+    const winnerDiv = document.querySelector('.winner');
     let player1Name = '';
     let player2Name = '';
 
@@ -109,6 +114,9 @@ const displayController = (() => {
 
         startGame(player1Name, player2Name);
     });
+
+    // Reset winner display
+    
 
     // Handle game restart
     restartButton.addEventListener('click', () => {
@@ -133,14 +141,18 @@ const displayController = (() => {
 
     // Display the winner
     const showWinner = (winner) => {
-        const winnerDiv = document.querySelector('.winner');
-        winnerDiv.textContent = `The winner is ${winner.getName()}`;
+        if (winner) {
+            winnerDiv.textContent = `The winner is ${winner.getName()}`;
+        } else {
+            winnerDiv.textContent = '';
+        }
+
     }
 
     // Show the current player's turn
     const showTurn = () => {
         const turnDiv = document.getElementById('turn');
-        turnDiv.textContent = gameController.getCurrentPlayer().getName();
+        turnDiv.textContent = `${gameController.getCurrentPlayer().getName()}'s turn`;
     }
 
     // Set up event listeners for cell buttons
@@ -162,7 +174,7 @@ const displayController = (() => {
                         const btn = cell.querySelector('button');
                         btn.disabled = true;
                     });
-                }
+                } 
             });
         });
     }
@@ -172,10 +184,13 @@ const displayController = (() => {
 
 // Start the game with initial player names
 const startGame = (player1Name, player2Name) => {
-    gameController.setPlayerNames(player1Name, player2Name);
-    displayController.setupEventListeners();
-    displayController.updateBoard();
-    displayController.showTurn();
+    if (gameBoard.isBoardEmpty()){
+        gameController.setPlayerNames(player1Name, player2Name);
+        displayController.setupEventListeners();
+        displayController.updateBoard();
+        displayController.showTurn();
+    }
+
 }
 
 // Reset the game
@@ -184,7 +199,10 @@ const resetGame = () => {
     displayController.updateBoard();
     displayController.setupEventListeners();
     displayController.showTurn();
+    displayController.showWinner();
 }
 
 // Start the game with default player names
-startGame('Player1', 'Player2');
+// startGame('Player1', 'Player2');
+
+// Fix resetGame and set default values for players nicknames. TODO: Improve Frontend.
