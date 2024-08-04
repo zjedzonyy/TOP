@@ -1,12 +1,15 @@
 // to store new instances of Book
 const myLibrary = [];
 
-function Book(title, author, pages, read) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.read = read;
-    this.info = function() {
+class Book {
+    constructor(_title, _author, _pages, _read) {
+        this.title = _title;
+        this.author = _author;
+        this.pages = _pages;
+        this.read = _read;
+    }
+
+    info = () => {
         console.log(`${this.title}, by ${this.author}, ${this.pages}, ${this.read}`)
     }
 }
