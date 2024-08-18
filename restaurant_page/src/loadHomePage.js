@@ -1,4 +1,5 @@
 // creating content for the main page
+import ownerImage from './images/owner.webp';
 
 export default function loadHomePage() {
     // HTML
@@ -35,17 +36,18 @@ export default function loadHomePage() {
             min-height: 400px;
             text-align: center;
             color: rgba(245, 245, 245, 0.815);
-        },
+        }
         #owner {
             height: 60%;
             width: 60%;
-            background-image: url("/src/images/owner.webp");
+            background-image: url(${ownerImage});
             background-position: center;
             background-repeat: no-repeat; 
             background-size: cover; 
             opacity: 1;
             border-radius: 50%;
-        }`
+        }`;
+        
     const styleSheet = document.createElement("style");
     styleSheet.id = "dynamicStyles";
     styleSheet.textContent = styles;

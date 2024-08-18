@@ -25,6 +25,10 @@ module.exports = {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
       },
+      {
+        test: /\.(png|jpg|gif|webp|svg)$/i,  // Obsługuje pliki obrazów
+        type: 'asset/resource',  // Używa Webpack Asset Modules
+      },
     ],
   },
 };
